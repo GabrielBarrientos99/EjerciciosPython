@@ -6,10 +6,25 @@ Stock = {1:50, 2:45, 3:30, 4:15}
 import pandas as pd
 
 class ProductosControler:
-    '''Clase que recibe un conjunto de diccionarios y controla los métodos
-    Agregar , Eliminar , Actualizar y Salir
-    '''
+    """Clase que recibe un conjunto de diccionarios y controla los métodos
+    Agregar, Eliminar, Actualizar y Salir.
+
+    Atributos:
+        Productos (dict): Diccionario con los nombres de los productos.
+        Precios (dict): Diccionario con los precios de los productos.
+        Stock (dict): Diccionario con las cantidades en stock de los productos.
+        cantidad_total (int): Número total de productos.
+        Producto_Table (pd.DataFrame): DataFrame que representa la tabla de productos.
+        Salir (bool): Bandera para indicar si el programa debe terminar.
+    """
     def __init__(self,Productos,Precios,Stock):
+        """Inicializa la clase con los diccionarios de productos, precios y stock.
+
+        Args:
+            Productos (dict): Diccionario con los nombres de los productos.
+            Precios (dict): Diccionario con los precios de los productos.
+            Stock (dict): Diccionario con las cantidades en stock de los productos.
+        """
         self.Productos = Productos
         self.Precios = Precios
         self.Stock = Stock
@@ -18,7 +33,11 @@ class ProductosControler:
         self.Salir = False
 
     def generate_dataframe(self):
-        ''' Funcion que genera un dataframe con los diccionarios'''
+        """Genera un DataFrame con los diccionarios de productos, precios y stock.
+
+        Returns:
+            pd.DataFrame: DataFrame con columnas 'Nombre', 'Precio', 'Cantidad'.
+        """
         dic = {
             'Nombre': self.Productos.values() ,
             'Precio': self.Precios.values() ,
@@ -33,12 +52,13 @@ class ProductosControler:
         print(self.Producto_Table)
         
     def mostrar_op(self):
+        """Muestra las opciones disponibles para el usuario en la consola."""
         print('\n[1] Agregar, [2] Eliminar, [3] Actualizar, [4] Salir ')        
         self.input = int(input('Elija una opcion:'))
         print()
         
     def run(self):
-        
+        """Ejecuta el programa y gestiona la interacción con el usuario."""
         while(self.Salir==False):
             
             self.mostrar_prod()
@@ -67,10 +87,20 @@ class ProductosControler:
     
    
     def agregar(self,registro):
+        """Agrega un nuevo registro a la tabla de productos.
+
+        Args:
+            registro (dict): Diccionario con los datos del nuevo producto ('Nombre', 'Precio', 'Cantidad').
+        """
         self.Producto_Table.loc[self.cantidad_total+1] = registro.values()
         self.cantidad_total+=1
         
     def eliminar(self,indice):
+        """Elimina un registro de la tabla de productos.
+
+        Args:
+            indice (int): Índice del registro a eliminar.
+        """
         try:
             self.Producto_Table = self.Producto_Table.drop(indice)
             self.Producto_Table.index = range(1, self.cantidad_total)
@@ -79,6 +109,7 @@ class ProductosControler:
             print(f'No existe el indice: {indice}')
 
     def actualizar(self):
+        """Actualiza un registro existente en la tabla de productos."""
         try:
             indice = int(input('Ingresa el índice del registro a actualizar: '))
             if indice not in self.Producto_Table.index:
@@ -94,6 +125,7 @@ class ProductosControler:
         except ValueError:
             print('Entrada no válida. Asegúrese de ingresar los datos correctamente.')
     def salir(self):
+        """Finaliza la ejecución del programa."""
         self.Salir=True
 
 p = ProductosControler(Productos,Precios,Stock)
