@@ -31,6 +31,7 @@ class ProductosControler:
         self.cantidad_total = len(self.Productos)
         self.Producto_Table = self.generate_dataframe()
         self.Salir = False
+        self.input = 0
 
     def generate_dataframe(self):
         """Genera un DataFrame con los diccionarios de productos, precios y stock.
@@ -38,12 +39,16 @@ class ProductosControler:
         Returns:
             pd.DataFrame: DataFrame con columnas 'Nombre', 'Precio', 'Cantidad'.
         """
+        # Asegurarse de que las claves sean las mismas y ordenadas
+        indices = sorted(set(self.Productos) & set(self.Precios) & set(self.Stock))
+        
         dic = {
-            'Nombre': self.Productos.values() ,
-            'Precio': self.Precios.values() ,
-            'Cantidad': self.Stock.values()
+            'Nombre': [self.Productos[i] for i in indices],
+            'Precio': [self.Precios[i] for i in indices],
+            'Cantidad': [self.Stock[i] for i in indices]
         }
-        return pd.DataFrame(dic,index = range(1,self.cantidad_total + 1))
+        return pd.DataFrame(dic, index=range(1, len(indices) + 1))
+
 
     def mostrar_prod(self):
         print('\n--------------------------------------------------')
@@ -53,8 +58,12 @@ class ProductosControler:
         
     def mostrar_op(self):
         """Muestra las opciones disponibles para el usuario en la consola."""
-        print('\n[1] Agregar, [2] Eliminar, [3] Actualizar, [4] Salir ')        
-        self.input = int(input('Elija una opcion:'))
+        print('\n[1] Agregar, [2] Eliminar, [3] Actualizar, [4] Salir ') 
+        try:       
+            self.input = int(input('Elija una opcion:'))
+        except:
+            print('No se ha colocado un valor correcto')
+            
         print()
         
     def run(self):
